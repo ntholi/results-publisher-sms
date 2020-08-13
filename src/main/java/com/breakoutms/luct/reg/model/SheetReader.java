@@ -31,14 +31,14 @@ public class SheetReader {
 	private int remarksCol;
 	private int firstRow;
 	
-	public SheetReader(Sheet sheet) {
+	public SheetReader(String workbookName, Sheet sheet) {
 		this.sheet = sheet;
-		firstRow = SheetHelper.getFirstRow(sheet);
-		namesCol = SheetHelper.getNamesCol(sheet);
-		contactsCol = SheetHelper.getContactsCol(sheet);
-		studentNumberCol = SheetHelper.getStudentNumberCol(sheet);
+		firstRow = SheetHelper.getFirstRow(workbookName, sheet);
+		namesCol = SheetHelper.getNamesCol(workbookName, sheet);
+		contactsCol = SheetHelper.getContactsCol(workbookName, sheet);
+		studentNumberCol = SheetHelper.getStudentNumberCol(workbookName, sheet);
 		courseNames = SheetHelper.getCourseNames(sheet, firstRow);
-		remarksCol = SheetHelper.getRemarksCol(sheet);
+		remarksCol = SheetHelper.getRemarksCol(workbookName, sheet);
 	}
 	
 	public Set<StudentResult> getResults() {

@@ -11,10 +11,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 public interface SheetHelper {
 
-	public static final String ERROR_MESSAGE = "Unable to find a required cell on sheet '%s', "
+	public static final String ERROR_MESSAGE = "Unable to find a required cell on sheet '%s' in '%s', "
 			+ "was expecting a cell with a value matching '%s'";
 	
-	public static int getLastCol(Sheet sheet) {
+	public static int getLastCol(String workbookName, Sheet sheet) {
 		String indicator = "No. of Module";
 		DataFormatter dataFormatter = new DataFormatter();
 		for (Row rows : sheet) {
@@ -26,18 +26,18 @@ public interface SheetHelper {
 			}	
 		}
 		throw new IllegalStateException(String.format(ERROR_MESSAGE, 
-				sheet.getSheetName(), indicator));
+				sheet.getSheetName(), workbookName, indicator));
 	}
 
-	public static int getFirstCol(Sheet sheet) {
-		return getFirstCell(sheet).getColumnIndex() - 3;
+	public static int getFirstCol(String workbookName, Sheet sheet) {
+		return getFirstCell(workbookName, sheet).getColumnIndex() - 3;
 	}
 
-	public static int getFirstRow(Sheet sheet) {
-		return getFirstCell(sheet).getRowIndex() + 1;
+	public static int getFirstRow(String workbookName, Sheet sheet) {
+		return getFirstCell(workbookName, sheet).getRowIndex() + 1;
 	}
 
-	private static Cell getFirstCell(Sheet sheet) {
+	private static Cell getFirstCell(String workbookName, Sheet sheet) {
 		String indicator = "Mk";
 		DataFormatter dataFormatter = new DataFormatter();
 		for (Row rows : sheet) {
@@ -49,24 +49,24 @@ public interface SheetHelper {
 			}	
 		}
 		throw new IllegalStateException(String.format(ERROR_MESSAGE, 
-				sheet.getSheetName(), indicator));
+				sheet.getSheetName(), workbookName, indicator));
 	}
 	
-	public static int getRemarksCol(Sheet sheet) {
-		return getStudentDetailsCol(sheet, "Remark");
+	public static int getRemarksCol(String workbookName, Sheet sheet) {
+		return getStudentDetailsCol(workbookName, sheet, "Remark");
 	}
 
-	public static int getNamesCol(Sheet sheet) {
-		return getStudentDetailsCol(sheet, "Name");
+	public static int getNamesCol(String workbookName, Sheet sheet) {
+		return getStudentDetailsCol(workbookName, sheet, "Name");
 	}
 
-	public static int getStudentNumberCol(Sheet sheet) {
-		return getStudentDetailsCol(sheet, "Student N", "StudentN", "StudentID", "Student ID");
+	public static int getStudentNumberCol(String workbookName, Sheet sheet) {
+		return getStudentDetailsCol(workbookName, sheet, "Student N", "StudentN", "StudentID", "Student ID");
 
 	}
 
-	public static int getContactsCol(Sheet sheet) {
-		return getStudentDetailsCol(sheet, "Contact", "Phone");
+	public static int getContactsCol(String workbookName, Sheet sheet) {
+		return getStudentDetailsCol(workbookName, sheet, "Contact", "Phone");
 	}
 
 	public static Map<Integer, String> getCourseNames(Sheet sheet, int resultsRow) {
@@ -88,7 +88,7 @@ public interface SheetHelper {
 		return courses;
 	}
 
-	public static int getStudentDetailsCol(Sheet sheet, String... indicators) {
+	public static int getStudentDetailsCol(String workbookName, Sheet sheet, String... indicators) {
 		DataFormatter dataFormatter = new DataFormatter();
 		for (Row rows : sheet) {
 			for (Cell cell : rows) {
@@ -99,7 +99,7 @@ public interface SheetHelper {
 			}	
 		}
 		throw new IllegalStateException(String.format(ERROR_MESSAGE, 
-				sheet.getSheetName(), Arrays.toString(indicators)));
+				sheet.getSheetName(), workbookName, Arrays.toString(indicators)));
 	}
 
 	private static boolean isAlphanumeric(String str) {

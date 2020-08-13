@@ -1,27 +1,32 @@
 package com.breakoutms.luct.reg;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ScrollPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
-
 import java.io.File;
 import java.util.List;
 
 import com.breakoutms.luct.reg.model.WorkbookReader;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
+import javafx.stage.FileChooser;
 
 public class MainController {
 
+    @FXML private Label statusLabel;
 	@FXML private ProgressBar progressBar;
 	@FXML private Button okBtn;
 	@FXML private Button openBtn;
 	@FXML private ScrollPane scrollPane;
-
-	@FXML
+    @FXML private ListView<?> listView;
+    private WorkbookReader workbookReader = new WorkbookReader();
+	
+    @FXML
 	void initialize() {
 	}
 
@@ -33,7 +38,27 @@ public class MainController {
 				new FileChooser.ExtensionFilter("Microsoft Excel Binary File Format", "*.xls"),
 				new FileChooser.ExtensionFilter("OpenDocument Spreadsheet", "*.ods"));
 		List<File> files = fileChooser.showOpenMultipleDialog(null);
-		WorkbookReader reader = new WorkbookReader();
-		reader.read(files);
+		
+		int size = workbookReader.loadFiles(files);
+		statusLabel.setText("Loaded "+size+" workbook(s)");
+		okBtn.setDisable(false);
 	}
+	
+    @FXML
+    void process(ActionEvent event) {
+    	var task = workbookReader.readStudentResults();
+    	statusLabel.textProperty().bind(task.messageProperty());
+    	progressBar.progressProperty().bind(task.progressProperty());
+    	task.setOnSucceeded(ev ->{
+    		System.out.println("Done");
+    	});
+    	task.setOnFailed(ev ->{
+    		var ex = ev.getSource().getException();
+    		Alert alert = new Alert(AlertType.ERROR);
+    		alert.setHeaderText("Error! Cannot continue");
+    		alert.setContentText(ex.getMessage());
+    		alert.showAndWait();
+    	});
+    }
+
 }
