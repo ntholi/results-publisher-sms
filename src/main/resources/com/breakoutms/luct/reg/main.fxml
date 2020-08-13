@@ -9,14 +9,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.breakoutms.luct.reg.ui.MainController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.breakoutms.luct.reg.MainController">
    <bottom>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
          <children>
-            <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
+            <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" progress="0.0" />
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button fx:id="ok" mnemonicParsing="false" text="Button" />
+                <Button fx:id="okBtn" mnemonicParsing="false" text="Next" />
               </buttons>
             </ButtonBar>
          </children>
@@ -28,7 +28,7 @@
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <Button mnemonicParsing="false" text="Open" />
+          <Button fx:id="openBtn" mnemonicParsing="false" onAction="#open" text="Open" />
         </items>
       </ToolBar>
    </top>

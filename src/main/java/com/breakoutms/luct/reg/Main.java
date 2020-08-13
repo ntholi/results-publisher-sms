@@ -1,26 +1,28 @@
 package com.breakoutms.luct.reg;
 
-import java.io.File;
-import java.util.Set;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import java.io.IOException;
 
-import com.breakoutms.luct.reg.model.WorkbookReader;
-import com.breakoutms.luct.reg.model.beans.StudentResult;
+public class Main extends Application {
+	
+    @Override
+    public void start(Stage stage) throws IOException {
+        Scene scene = new Scene(loadFXML("main"), 640, 480);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-public class Main {
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
 
-	public static final String SAMPLE_XLSX_FILE_PATH = "/home/ntholi/Documents/Projects/Limkokwing/ResultsPublisher/sample.xlsx";
-
-	public static void main(String[] args) throws Exception {
-
-		Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
-	    System.out.println("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
-	    var bookReader = new WorkbookReader();
-	    Set<StudentResult> list = bookReader.read(workbook);
-	    for (StudentResult res : list) {
-			System.out.println(res);
-		}
-	}
+    public static void main(String[] args) {
+        launch();
+    }
 }
