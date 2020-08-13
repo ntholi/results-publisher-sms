@@ -15,6 +15,6 @@ public class PhoneNumber {
 
 	@Override
 	public String toString() {
-		return "PhoneNumber: " + value;
+		return value;
 	}	
 }

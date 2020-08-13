@@ -2,8 +2,11 @@ package com.breakoutms.luct.reg;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
+import com.breakoutms.luct.reg.model.ResultPublisher;
 import com.breakoutms.luct.reg.model.WorkbookReader;
+import com.breakoutms.luct.reg.model.beans.StudentResult;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 
 public class MainController {
@@ -27,6 +31,7 @@ public class MainController {
     @FXML private Label title;
     private WorkbookReader workbookReader;
     private int steps = 0;
+	private Set<StudentResult> studentResults;
 	
     @FXML
 	void initialize() {
@@ -55,13 +60,25 @@ public class MainController {
 		case 1:
 			sendSmsUI();
 			break;
+		case 2:
+			sendSms();
+			break;
 
 		default:
 			break;
 		}
     }
 
+	private void sendSms() {
+		ResultPublisher publisher = new ResultPublisher();
+		var task = publisher.publish(studentResults);
+		progressBar.progressProperty().unbind();
+		progressBar.progressProperty().bind(task.progressProperty());
+	}
+
 	private void sendSmsUI() {
+		title.setText("Ready to send SMSs to "+studentResults.size()+" student(s)");
+		listView.getItems().clear();
 		++steps;
 	}
 
@@ -76,13 +93,13 @@ public class MainController {
     	task.setOnFailed(ev ->{
     		var ex = ev.getSource().getException();
     		Alert alert = new Alert(AlertType.ERROR);
-    		alert.setHeaderText("Error! Cannot continue");
-    		Label label = new Label(ex.getMessage());
-    		label.setPrefHeight(100);
-    		label.setPrefWidth(350);
-    		label.setWrapText(true);
-    		alert.getDialogPane().setContent(label);
+    		alert.setHeaderText("Error! Unable continue");
+    		alert.setContentText(ex.getMessage());
+    		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
     		alert.showAndWait();
+    	});
+    	task.setOnScheduled(ev ->{
+    		studentResults = task.getValue();
     	});
     	++steps;
 	}
