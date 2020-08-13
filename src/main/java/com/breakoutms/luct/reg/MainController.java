@@ -23,8 +23,10 @@ public class MainController {
 	@FXML private Button okBtn;
 	@FXML private Button openBtn;
 	@FXML private ScrollPane scrollPane;
-    @FXML private ListView<?> listView;
+    @FXML private ListView<Object> listView;
+    @FXML private Label title;
     private WorkbookReader workbookReader;
+    private int steps = 0;
 	
     @FXML
 	void initialize() {
@@ -46,20 +48,43 @@ public class MainController {
 	
     @FXML
     void process(ActionEvent event) {
-    	var task = workbookReader.readStudentResults();
+    	switch (steps) {
+		case 0:
+			readStudents();
+			break;
+		case 1:
+			sendSmsUI();
+			break;
+
+		default:
+			break;
+		}
+    }
+
+	private void sendSmsUI() {
+		++steps;
+	}
+
+	private void readStudents() {
+		var task = workbookReader.readStudentResults();
     	progressBar.progressProperty().bind(task.progressProperty());
-    	task.messageProperty().addListener((ob, oldv, newv)->
-    		statusLabel.setText(newv));
-    	task.setOnSucceeded(ev ->{
-    		System.out.println("Done");
+    	listView.getItems().clear();
+    	task.messageProperty().addListener((ob, oldv, newv)->{
+    		listView.getItems().add(newv);
+    		statusLabel.setText("Reading class: "+newv);
     	});
     	task.setOnFailed(ev ->{
     		var ex = ev.getSource().getException();
     		Alert alert = new Alert(AlertType.ERROR);
     		alert.setHeaderText("Error! Cannot continue");
-    		alert.setContentText(ex.getMessage());
+    		Label label = new Label(ex.getMessage());
+    		label.setPrefHeight(100);
+    		label.setPrefWidth(350);
+    		label.setWrapText(true);
+    		alert.getDialogPane().setContent(label);
     		alert.showAndWait();
     	});
-    }
+    	++steps;
+	}
 
 }

@@ -52,7 +52,7 @@ public class WorkbookReader {
 				double workDone = 1;
 				for (var workbook : workBooks.entrySet()) {
 					for (Sheet seet : workbook.getValue()) {
-						updateMessage("Reading class: "+ seet.getSheetName());
+						updateMessage(seet.getSheetName());
 						updateProgress(workDone, totalWorksheets);
 						var res = readSheet(workbook.getKey(), seet);
 						list.addAll(res);
