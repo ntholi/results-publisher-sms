@@ -24,7 +24,7 @@ public class MainController {
 	@FXML private Button openBtn;
 	@FXML private ScrollPane scrollPane;
     @FXML private ListView<?> listView;
-    private WorkbookReader workbookReader = new WorkbookReader();
+    private WorkbookReader workbookReader;
 	
     @FXML
 	void initialize() {
@@ -39,16 +39,17 @@ public class MainController {
 				new FileChooser.ExtensionFilter("OpenDocument Spreadsheet", "*.ods"));
 		List<File> files = fileChooser.showOpenMultipleDialog(null);
 		
-		int size = workbookReader.loadFiles(files);
-		statusLabel.setText("Loaded "+size+" workbook(s)");
+		workbookReader = new WorkbookReader(files);
+		statusLabel.setText("Loaded "+workbookReader.getTotalWorkbooks()+" workbook(s)");
 		okBtn.setDisable(false);
 	}
 	
     @FXML
     void process(ActionEvent event) {
     	var task = workbookReader.readStudentResults();
-    	statusLabel.textProperty().bind(task.messageProperty());
     	progressBar.progressProperty().bind(task.progressProperty());
+    	task.messageProperty().addListener((ob, oldv, newv)->
+    		statusLabel.setText(newv));
     	task.setOnSucceeded(ev ->{
     		System.out.println("Done");
     	});

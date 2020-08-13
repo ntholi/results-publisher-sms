@@ -12,7 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 public interface SheetHelper {
 
 	public static final String ERROR_MESSAGE = "Unable to find a required cell on sheet '%s' in '%s', "
-			+ "was expecting a cell with a value matching '%s'";
+			+ "was expecting a cell with a value matching any of the following '%s'";
 	
 	public static int getLastCol(String workbookName, Sheet sheet) {
 		String indicator = "No. of Module";

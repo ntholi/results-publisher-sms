@@ -14,13 +14,20 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import com.breakoutms.luct.reg.model.beans.StudentResult;
 
 import javafx.concurrent.Task;
+import lombok.Getter;
 
+@Getter
 public class WorkbookReader {
 
 	private Map<String, Workbook> workBooks = new HashMap<>();
-	private int sheetSize;
+	private int totalWorksheets;
+	private int totalWorkbooks;
+	
+	public WorkbookReader(List<File> files) {
+		totalWorkbooks = loadFiles(files);
+	}
 
-	public int loadFiles(List<File> files) {
+	private int loadFiles(List<File> files) {
 		for (File file : files) {
 			try {
 				Workbook workbook = WorkbookFactory.create(file);
@@ -29,7 +36,7 @@ public class WorkbookReader {
 				e.printStackTrace();
 			}
 		}
-		sheetSize = workBooks.values()
+		totalWorksheets = workBooks.values()
 				.stream()
 				.mapToInt(Workbook::getNumberOfSheets)
 				.sum();
@@ -46,7 +53,7 @@ public class WorkbookReader {
 				for (var workbook : workBooks.entrySet()) {
 					for (Sheet seet : workbook.getValue()) {
 						updateMessage("Reading class: "+ seet.getSheetName());
-						updateProgress(workDone, sheetSize);
+						updateProgress(workDone, totalWorksheets);
 						var res = readSheet(workbook.getKey(), seet);
 						list.addAll(res);
 						++workDone;
@@ -57,7 +64,6 @@ public class WorkbookReader {
 			
 			@Override
 			protected void failed() {
-//				super.failed();
 				updateProgress(0, 0);
 				updateMessage(getException().getMessage());
 			}
