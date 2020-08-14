@@ -1,6 +1,7 @@
 package com.breakoutms.luct.reg;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class MainController {
 	
     @FXML
 	void initialize() {
+    	
 	}
 
 	@FXML
@@ -74,11 +76,28 @@ public class MainController {
 		var task = publisher.publish(studentResults);
 		progressBar.progressProperty().unbind();
 		progressBar.progressProperty().bind(task.progressProperty());
+		task.setOnRunning(ev -> {
+			title.setText("Sending SMSs...");
+			statusLabel.setText("Sending SMSs...");
+			progressBar.setVisible(true);
+		});
+    	task.messageProperty().addListener((ob, oldv, newv)->{
+    		listView.getItems().add(newv);
+    	});
+    	task.progressProperty().addListener((ob, oldv, newv)->{
+    		DecimalFormat df = new DecimalFormat("##.##%");
+    		statusLabel.setText(df.format(newv));
+    	});
+		
 	}
 
 	private void sendSmsUI() {
-		title.setText("Ready to send SMSs to "+studentResults.size()+" student(s)");
+		title.setText(studentResults.size()+" student(s) loaded");
+		statusLabel.setText("Ready to send");
+		okBtn.setText("Send");
 		listView.getItems().clear();
+		progressBar.setVisible(false);
+		openBtn.setDisable(true);
 		++steps;
 	}
 
@@ -98,7 +117,7 @@ public class MainController {
     		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
     		alert.showAndWait();
     	});
-    	task.setOnScheduled(ev ->{
+    	task.setOnSucceeded(ev ->{
     		studentResults = task.getValue();
     	});
     	++steps;

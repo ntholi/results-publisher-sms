@@ -11,17 +11,27 @@ public class ResultPublisher {
 
 	public Task<Void> publish(Set<StudentResult> studentResults){
 		int size = studentResults.size();
-		return new Task<>() {
+		var task = new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
 				int workDone = 0;
 				for (StudentResult results : studentResults) {
-					SMS sms = results.getSMS();
-					updateMessage(sms.getMessage());
-					updateProgress(++workDone, size);
+					try {
+						if (results != null) {
+							SMS sms = results.getSMS();
+							updateMessage(sms.getId());
+						}
+						Thread.sleep(100);
+						System.out.println(workDone+" of "+studentResults.size()+" -> "+results);
+						updateProgress(++workDone, size);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				return null;
 			}
 		};
+		new Thread(task).start();
+		return task;
 	}
 }
