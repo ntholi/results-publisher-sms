@@ -6,6 +6,7 @@ module com.breakoutms.luct.reg {
 	requires org.apache.commons.lang3;
 	requires lombok;
 	requires javafx.graphics;
+	requires http.request;
 
     opens com.breakoutms.luct.reg to javafx.fxml;
     exports com.breakoutms.luct.reg;

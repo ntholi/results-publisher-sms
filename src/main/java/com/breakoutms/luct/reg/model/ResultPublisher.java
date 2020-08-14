@@ -19,9 +19,9 @@ public class ResultPublisher {
 					try {
 						if (results != null) {
 							SMS sms = results.getSMS();
+							SmsSender.send(sms);
 							updateMessage(sms.getId());
 						}
-						Thread.sleep(100);
 						System.out.println(workDone+" of "+studentResults.size()+" -> "+results);
 						updateProgress(++workDone, size);
 					} catch (Exception e) {

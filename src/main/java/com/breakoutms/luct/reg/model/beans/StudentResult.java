@@ -47,7 +47,7 @@ public class StudentResult {
 		for (Marks mark : marks) {
 			sb.append("\n").append(mark.toString());
 		}
-		sb.append(remarks);
+		sb.append("\n").append(remarks);
 		return sb.toString();
 	}
 }
