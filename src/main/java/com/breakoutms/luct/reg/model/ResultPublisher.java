@@ -17,13 +17,14 @@ public class ResultPublisher {
 				int workDone = 0;
 				for (StudentResult results : studentResults) {
 					try {
+						++workDone;
+						updateProgress(workDone, size);
 						if (results != null) {
 							SMS sms = results.getSMS();
 							SmsSender.send(sms);
 							updateMessage(sms.getId());
+							System.out.println(workDone+" of "+studentResults.size()+": "+results.getPhoneNumber()+" -> "+results);
 						}
-						System.out.println(workDone+" of "+studentResults.size()+": "+results.getPhoneNumber()+" -> "+results);
-						updateProgress(++workDone, size);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

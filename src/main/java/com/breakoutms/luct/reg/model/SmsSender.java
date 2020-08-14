@@ -1,11 +1,10 @@
 package com.breakoutms.luct.reg.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.github.kevinsawicki.http.HttpRequest;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import com.breakoutms.luct.reg.model.beans.SMS;
+import com.github.kevinsawicki.http.HttpRequest;
 
 public class SmsSender {
 
@@ -16,14 +15,12 @@ public class SmsSender {
 			e.printStackTrace();
 		}
 		
-		String url = "http://smsapi.myself.co.ls"
-				+ "?apikey=1549440526";
-		Map<String, String> params = new HashMap<String, String>();
+		String format = "http://smsapi.myself.co.ls"
+				+ "/send?apikey=1549440526&number=%s&msg=%s";
 		if (sms.getPhoneNumber() != null) {
-			String message = sms.getMessage();
-			params.put("number", sms.getPhoneNumber());
-			params.put("message", message);
-			HttpRequest request = HttpRequest.post(url, params, true);
+			String message = URLEncoder.encode(sms.getMessage(), StandardCharsets.UTF_8);
+			String url = String.format(format, sms.getPhoneNumber(), message);
+			HttpRequest request = HttpRequest.post(url);
 			System.out.println(request.body());
 		}
 	}
