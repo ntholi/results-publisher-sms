@@ -80,6 +80,7 @@ public class MainController {
 			title.setText("Sending SMSs...");
 			statusLabel.setText("Sending SMSs...");
 			progressBar.setVisible(true);
+			okBtn.setDisable(true);
 		});
     	task.messageProperty().addListener((ob, oldv, newv)->{
     		listView.getItems().add(newv);
@@ -118,6 +119,7 @@ public class MainController {
     		alert.showAndWait();
     	});
     	task.setOnSucceeded(ev ->{
+    		statusLabel.setText("Done!");
     		studentResults = task.getValue();
     	});
     	++steps;

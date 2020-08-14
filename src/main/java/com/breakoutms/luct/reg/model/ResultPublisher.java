@@ -22,7 +22,7 @@ public class ResultPublisher {
 							SmsSender.send(sms);
 							updateMessage(sms.getId());
 						}
-						System.out.println(workDone+" of "+studentResults.size()+" -> "+results);
+						System.out.println(workDone+" of "+studentResults.size()+": "+results.getPhoneNumber()+" -> "+results);
 						updateProgress(++workDone, size);
 					} catch (Exception e) {
 						e.printStackTrace();
