@@ -8,7 +8,7 @@ import com.github.kevinsawicki.http.HttpRequest;
 
 public class SmsSender {
 
-	public static void send(SMS sms){
+	public static SMS send(SMS sms){
 		try {
 			Thread.sleep(50);
 		} catch (InterruptedException e) {
@@ -21,7 +21,8 @@ public class SmsSender {
 			String message = URLEncoder.encode(sms.getMessage(), StandardCharsets.UTF_8);
 			String url = String.format(format, sms.getPhoneNumber(), message);
 			HttpRequest request = HttpRequest.post(url);
-			System.out.println(request.body());
+			sms.setResponse(request.body());
 		}
+		return sms;
 	}
 }

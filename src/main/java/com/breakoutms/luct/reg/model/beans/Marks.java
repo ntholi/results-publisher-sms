@@ -10,4 +10,9 @@ import lombok.NoArgsConstructor;
 public class Marks {
 	private String cause;
 	private String grade;
+	
+	@Override
+	public String toString() {
+		return cause +": "+ grade;
+	}
 }

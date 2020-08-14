@@ -11,4 +11,5 @@ public class SMS {
 	private int numberOfSMSs;
 	private boolean sent;
 	private String errorMessage;
+	private String response;
 }

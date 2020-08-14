@@ -35,7 +35,7 @@ public class StudentResult {
 	}
 	
 	public String getPhoneNumber() {
-		if(student != null) {
+		if(student != null && student.getPhoneNumber() != null) {
 			return student.getPhoneNumber().getValue();
 		}
 		return null;
